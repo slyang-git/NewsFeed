@@ -35,7 +35,7 @@
 	}
 	
 	if (isset($_POST['email'])) {
-		if(strlen($_POST['email']) ==0) {
+		if(empty($_POST['email'])) {
 			echo ('<script type="text/javascript">alert("认真点-^- 邮箱不能为空:-(");</script>');
 			return;
 		}
