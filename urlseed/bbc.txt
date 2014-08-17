@@ -1,1 +1,11 @@
 http://www.bbc.co.uk/zhongwen/simp/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/world/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/chinese_news/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/uk/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/indepth/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/interactive/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/science/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/business/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/sports/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/uk_study/
+http://www.bbc.co.uk/go/zhongwen/simp/nav/int/-/zhongwen/simp/elt/
