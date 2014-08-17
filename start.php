@@ -13,67 +13,67 @@ $crawler = '';
 $url_seed_filename = '';
 $fp = '';
 
-//¼ÇÂ¼¿ªÊ¼ÔËĞĞÊ±¼ä
+//è®°å½•å¼€å§‹è¿è¡Œæ—¶é—´
 $start_time= microtime(true);
 
-
-//=====Å¦Ô¼Ê±±¨===============
+/*
+//=====çº½çº¦æ—¶æŠ¥===============
 $crawler = new NYtimesCrawler();
 $filename = 'urlseed/nytimes.txt';
 $fp = fopen($filename,'r');
 
 while (!feof($fp)) {
     $link = fgets($fp);
-	if(empty($link)) continue; //·ÀÖ¹¿ÕĞĞ
-	echo '¿ªÊ¼ÅÀÈ¡Èë¿ÚURL£º' . $link;
+	if(empty($link)) continue; //é˜²æ­¢ç©ºè¡Œ
+	echo 'å¼€å§‹çˆ¬å–å…¥å£URLï¼š' . $link;
     $crawler->start($link);
 }
 
-//=====¸£²¼Ë¹ÖĞÎÄÍø===============
+//=====ç¦å¸ƒæ–¯ä¸­æ–‡ç½‘===============
 $crawler = new ForbesChinaCrawler();
 $url_seed_filename = 'urlseed/forbeschina.txt';
 $fp = fopen($url_seed_filename, 'r');
 
 while (!feof($fp)) {
     $link = fgets($fp);
-	if(empty($link)) continue; //·ÀÖ¹¿ÕĞĞ
-	echo '¿ªÊ¼ÅÀÈ¡Èë¿ÚURL£º' . $link . PHP_EOL;
+	if(empty($link)) continue; //é˜²æ­¢ç©ºè¡Œ
+	echo 'å¼€å§‹çˆ¬å–å…¥å£URLï¼š' . $link . PHP_EOL;
     $crawler->start($link);
 }
 
-//=====Ó¢¹ú½ğÈÚÊ±±¨===============
+//=====è‹±å›½é‡‘èæ—¶æŠ¥===============
 $crawler = new FTChineseCrawler();
 $url_seed_filename = 'urlseed/ftchinese.txt';
 $fp = fopen($url_seed_filename, 'r');
 
 while (!feof($fp)) {
     $link = fgets($fp);
-	if(empty($link)) continue; //·ÀÖ¹¿ÕĞĞ
-	echo '¿ªÊ¼ÅÀÈ¡Èë¿ÚURL£º' . $link . PHP_EOL;
+	if(empty($link)) continue; //é˜²æ­¢ç©ºè¡Œ
+	echo 'å¼€å§‹çˆ¬å–å…¥å£URLï¼š' . $link . PHP_EOL;
     $crawler->start($link);
 }
+*/
 
-/*
-//=====BBCÖĞÎÄÍø===============
+//=====BBCä¸­æ–‡ç½‘===============
 $crawler = new BBCCrawler();
 $url_seed_filename = 'urlseed/bbc.txt';
 $fp = fopen($url_seed_filename, 'r');
 
 while (!feof($fp)) {
     $link = fgets($fp);
-	if(strlen($link) < 0) continue; //·ÀÖ¹¿ÕĞĞ
-	echo '¿ªÊ¼ÅÀÈ¡Èë¿ÚURL£º' . $link . PHP_EOL;
+	if(empty($link)) continue; //é˜²æ­¢ç©ºè¡Œ
+	echo 'å¼€å§‹çˆ¬å–å…¥å£URLï¼š' . $link . PHP_EOL;
     $crawler->start($link);
 }
-*/
+
 
 /*
 
 */
-//¼ÇÂ¼½áÊøÔËĞĞÊ±¼ä
+//è®°å½•ç»“æŸè¿è¡Œæ—¶é—´
 $finish_time = microtime(true);
 
-echo '³ÌĞòÖ´ĞĞÍê³É£¬¹²ºÄÊ±£º' . ($finish_time - $start_time) . 'Ãë£¡';
+echo 'ç¨‹åºæ‰§è¡Œå®Œæˆï¼Œå…±è€—æ—¶ï¼š' . ($finish_time - $start_time) . 'ç§’ï¼';
 //$crawler->start('http://cn.nytimes.com/entrepreneurs/');
 
 

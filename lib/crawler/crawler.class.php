@@ -1,10 +1,10 @@
 <?php
 /**
-*	Description£ºÅÀ³æ³éÏóÀà£»
-*	¶¨ÒåÅÀ³æÀàµÄ³éÏóÀà£¬²¢ÉêÃ÷ÆäÖÐµÄ³éÏó·½·¨
-*	Created Date£º2014-08-09 13:15
-* 	Modified Date£º 
-*	Author£ºÑîË«Áú slyang@aliyun.com
+*	Descriptionï¼šçˆ¬è™«æŠ½è±¡ç±»ï¼›
+*	å®šä¹‰çˆ¬è™«ç±»çš„æŠ½è±¡ç±»ï¼Œå¹¶ç”³æ˜Žå…¶ä¸­çš„æŠ½è±¡æ–¹æ³•
+*	Created Dateï¼š2014-08-09 13:15
+* 	Modified Dateï¼š 
+*	Authorï¼šæ¨åŒé¾™ slyang@aliyun.com
 * 	
 **/
 

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>���Ŷ���</title>
+<title>新闻订阅</title>
 <meta charset="GBK" />
 <style type="text/css">
 	#subcribe {
@@ -17,7 +17,7 @@
 	require('lib/sendmail.class.php');
 	date_default_timezone_set('Asia/Shanghai');
 	
-	//���û�������Ϣ�����ݿ�
+	//将用户订阅信息存数据库
 	function save_to_db($sql,$email) {
 		$db = database::get_instance();
 		$mysqli = $db->getConnection();
@@ -36,12 +36,12 @@
 	
 	if (isset($_POST['email'])) {
 		if(empty($_POST['email'])) {
-			echo ('<script type="text/javascript">alert("�����-^- ���䲻��Ϊ��:-(");</script>');
+			echo ('<script type="text/javascript">alert("认真点-^- 邮箱不能为空:-(");</script>');
 			return;
 		}
 		$email = $_POST['email'];
 		if (query($email)) {
-			echo '<p style="color:#f00;">������ò���Ѿ����Ĺ�Ŷ��:-(</p>'. PHP_EOL;
+			echo '<p style="color:#f00;">此邮箱貌似已经订阅过哦！:-(</p>'. PHP_EOL;
 		} else {
 			$mail = new sendmail();
 			//$mail->mailbody();
@@ -50,9 +50,9 @@
 				$time = date("Y-m-d H:m:s");
 				$sql = "INSERT INTO subscriber (user_email,user_sub_time) VALUES('$email','$time')";
 				save_to_db($sql,$email);
-				echo '<div style="text-align:center;color:green;"><h1>��ϲ�������ĳɹ���������ʼ���</h1></div>';
+				echo '<div style="text-align:center;color:green;"><h1>恭喜您，订阅成功，请查收邮件！</h1></div>';
 			} else {
-				echo '<div style="text-align:center;color:#f00;"><h1>�ò�ƶ���ʧ�ܣ��ȴ��ҵĸĽ��ɣ�</h1></div>';
+				echo '<div style="text-align:center;color:#f00;"><h1>额，貌似订阅失败！等待我的改进吧！</h1></div>';
 			}
 			
 		}
@@ -64,9 +64,9 @@
 	
 <body>
 <div id="subcribe">
-	<p style='color:blue;'>360������û���Ҫ�ڵ�ַ������ĩβ���ͼ�꣬ѡ�񡰼���ģʽ��������������ļ������⣩</p>
+	<p style='color:blue;'>360浏览器用户需要在地址栏的最末尾点击图标，选择“极速模式”（这是浏览器的兼容问题）</p>
 	<form action="index.php" method="POST">
-		�������������ַ<input type="text" name='email'> <button>����</button>
+		输入您的邮箱地址<input type="text" name='email'> <button>订阅</button>
 	</form>
 </div>
 

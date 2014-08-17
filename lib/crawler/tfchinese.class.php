@@ -1,11 +1,11 @@
 <?php 
 /**
-*	Description£ºÓ¢¹ú½ðÈÚÊ±±¨ÖÐÎÄÍøhttp://www.ftchinese.com/ÅÀ³æ³ÌÐò£»
-*	¶ÔÃ¿Ò»¸öÈë¿ÚURL£¬Ê×ÏÈ½âÎö³öÆäÖÐµÄËùÓÐÎÄÕÂÁ´½ÓµØÖ·£¬ÔÙ½«ÕâÐ©ÎÄÕÂµØÖ·Öð¸öÏÂÔØ£¬
-*	½âÎö³öÆäÖÐµÄÖØÒª×Ö¶Î£¬ÈçÐÂÎÅ±êÌâ£¬·¢²¼Ê±¼ä£¬ÐÂÎÅÕýÎÄµÈ
-*	Created Date£º2014-08-12 22:36
-* 	Modified Date£º 
-*	Author£ºÑîË«Áú slyang@aliyun.com
+*	Descriptionï¼šè‹±å›½é‡‘èžæ—¶æŠ¥ä¸­æ–‡ç½‘http://www.ftchinese.com/çˆ¬è™«ç¨‹åºï¼›
+*	å¯¹æ¯ä¸€ä¸ªå…¥å£URLï¼Œé¦–å…ˆè§£æžå‡ºå…¶ä¸­çš„æ‰€æœ‰æ–‡ç« é“¾æŽ¥åœ°å€ï¼Œå†å°†è¿™äº›æ–‡ç« åœ°å€é€ä¸ªä¸‹è½½ï¼Œ
+*	è§£æžå‡ºå…¶ä¸­çš„é‡è¦å­—æ®µï¼Œå¦‚æ–°é—»æ ‡é¢˜ï¼Œå‘å¸ƒæ—¶é—´ï¼Œæ–°é—»æ­£æ–‡ç­‰
+*	Created Dateï¼š2014-08-12 22:36
+* 	Modified Dateï¼š 
+*	Authorï¼šæ¨åŒé¾™ slyang@aliyun.com
 * 	
 **/
 
@@ -24,10 +24,10 @@ class FTChineseCrawler extends crawler {
 	private $_url_history;
 	
 	/**
-	*	¹¹Ôìº¯Êý£º¼ÓÔØÀúÊ·urlÊý¾Ý£¨ÒÑÅÀÈ¡urlÎÄ¼þ£©
+	*	æž„é€ å‡½æ•°ï¼šåŠ è½½åŽ†å²urlæ•°æ®ï¼ˆå·²çˆ¬å–urlæ–‡ä»¶ï¼‰
 	*/
 	public function __construct() {
-		//»ñµÃÍøÒ³ÏÂÔØÆ÷ÊµÀý
+		//èŽ·å¾—ç½‘é¡µä¸‹è½½å™¨å®žä¾‹
 		$this->_downloader = downloader::get_instance();
 		$this->_url = new url();
 		$this->_url_history = 'urllog/ftchinese_url.txt';
@@ -35,20 +35,20 @@ class FTChineseCrawler extends crawler {
 	}
 
 	 /**
-	 * ÅÀ³æÆô¶¯ÔËÐÐ£¬urlÎªÈë¿ÚµØÖ·
+	 * çˆ¬è™«å¯åŠ¨è¿è¡Œï¼Œurlä¸ºå…¥å£åœ°å€
 	 */
 	public function start($url) {
         $html = $this->_downloader->download($url);
 		//$links = array();
         if (!($links = $this->extract_links($html))) {
-			print '¸ÃÈë¿ÚÖÐ£¬Î´³éÈ¡³öURL' . PHP_EOL;
+			print 'è¯¥å…¥å£ä¸­ï¼ŒæœªæŠ½å–å‡ºURL' . PHP_EOL;
 			return;
 		}
 		
-		//print '¿ªÊ¼ÏÂÔØÐÂÎÅ ' . PHP_EOL;
+		//print 'å¼€å§‹ä¸‹è½½æ–°é—» ' . PHP_EOL;
         foreach ($links as $link) {
             if ($this->_url->is_fetched($link)) {
-                print 'ºöÂÔÒ»ÌõÖØ¸´URL ' . PHP_EOL;
+                print 'å¿½ç•¥ä¸€æ¡é‡å¤URL ' . PHP_EOL;
                 continue;
             }
             $html = $this->_downloader->download($link);
@@ -65,7 +65,7 @@ class FTChineseCrawler extends crawler {
 	}
 
     /**
-	 * ³éÈ¡Ò³ÃæÖÐµÄÁ´½ÓµØÖ·
+	 * æŠ½å–é¡µé¢ä¸­çš„é“¾æŽ¥åœ°å€
      * @param $html
      * @return array
      */
@@ -75,11 +75,11 @@ class FTChineseCrawler extends crawler {
 		$pattern = '{/story/\\d{6,}}';
 		$matches = array();
 		preg_match_all($pattern, $html, $matches);
-		echo '³éÈ¡³öµÄÁ´½ÓÊýÁ¿£º' . count($matches[0]) . PHP_EOL;
+		echo 'æŠ½å–å‡ºçš„é“¾æŽ¥æ•°é‡ï¼š' . count($matches[0]) . PHP_EOL;
 		
 		foreach($matches[0] as $link) {
 			if ( $this->_url->is_fetched($link) ) {
-                echo 'ºöÂÔÒ»ÌõÒÑÅÀÈ¡URL' . PHP_EOL;
+                echo 'å¿½ç•¥ä¸€æ¡å·²çˆ¬å–URL' . PHP_EOL;
                 continue;
             }
 			
@@ -91,13 +91,13 @@ class FTChineseCrawler extends crawler {
 	}
 
 	/**
-	*	½âÎöÍøÒ³ÄÚÈÝ
+	*	è§£æžç½‘é¡µå†…å®¹
 	*/
 	public function extract_content($html) {
 		$doc = str_get_html($html);
         $article = array();
 		
-		//ÌáÈ¡ÐÂÎÅÍ¼Æ¬µØÖ·
+		//æå–æ–°é—»å›¾ç‰‡åœ°å€
 		
 		$image_url = '';
 		foreach ($doc->find('div#bodytext') as $element) {
@@ -108,7 +108,7 @@ class FTChineseCrawler extends crawler {
 			
 		}
 		
-		//Èç¹ûÎÄÕÂÖÐ¸½Í¼£¬ÔòÏÂÔØÍ¼Æ¬
+		//å¦‚æžœæ–‡ç« ä¸­é™„å›¾ï¼Œåˆ™ä¸‹è½½å›¾ç‰‡
 		if (!empty($image_url)) { 
 			$image_data = $this->_downloader->download($image_url);
 			if (strlen($image_data) != 0) {
@@ -122,7 +122,7 @@ class FTChineseCrawler extends crawler {
 		}
 		
 		
-        //ÌáÈ¡ÐÂÎÅÄÚÈÝ
+        //æå–æ–°é—»å†…å®¹
 		$content = '';
         foreach ( $doc->find('div#bodytext') as $element ) {
             foreach($element->find('p') as $ele) {
@@ -131,36 +131,36 @@ class FTChineseCrawler extends crawler {
         }
         $article['content'] = $content;
 
-        //ÌáÈ¡ÐÂÎÅÊ±¼ä
+        //æå–æ–°é—»æ—¶é—´
         foreach($doc->find('a.storytime') as $element) {
 			$date = $element->plaintext;
 		}
 		$date = $this->format_time($date);
         $article['date'] = $date;
 
-		//ÐÂÎÅ×«Ð´×÷Õß
+		//æ–°é—»æ’°å†™ä½œè€…
 		foreach($doc->find('div.byline') as $element) {
 			$author = $element->plaintext;
 		}
         $article['author'] = $author;
 		
-        //ÌáÈ¡ÐÂÎÅ±êÌâ
+        //æå–æ–°é—»æ ‡é¢˜
         $title = '';
 		foreach($doc->find('h1#topictitle') as $element) {
 			$title = $element->plaintext;
 		}
         $article['title'] = $title;
 
-        //ÐÂÎÅËùÊôÀà±ð
+        //æ–°é—»æ‰€å±žç±»åˆ«
         foreach($doc->find('span.channel') as $element) {
 			$category = $element->plaintext;
 		}
         $article['category'] = $category;
 
-        //ÐÂÎÅÀ´Ô´
-        $article['source'] = iconv('GBK','UTF-8','FTÖÐÎÄÍø');
+        //æ–°é—»æ¥æº
+        $article['source'] = iconv('GBK','UTF-8','FTä¸­æ–‡ç½‘');
 
-        //ÐÂÎÅURL
+        //æ–°é—»URL
         foreach($doc->find('link[rel=canonical]') as $element) {
 			$news_url = $element->href;
 		}
@@ -171,9 +171,9 @@ class FTChineseCrawler extends crawler {
 	}
 
 	public function format_time($time) {
-		$year = iconv('GBK','UTF-8','Äê');
-		$month = iconv('GBK','UTF-8','ÔÂ');
-		$day = iconv('GBK','UTF-8','ÈÕ');
+		$year = iconv('GBK','UTF-8','å¹´');
+		$month = iconv('GBK','UTF-8','æœˆ');
+		$day = iconv('GBK','UTF-8','æ—¥');
 		$am = 'AM';
 		$pm = 'PM';
 		$delim = array($year,$month);
@@ -185,14 +185,14 @@ class FTChineseCrawler extends crawler {
 	}
 	
 	/**
-	*	½«ÎÄÕÂ²åÈëÊý¾Ý¿â
+	*	å°†æ–‡ç« æ’å…¥æ•°æ®åº“
 	*/
     public function insert($article) {
-		//print '²åÈëÊý¾Ý¿â¿ªÊ¼£º ' . PHP_EOL;
+		//print 'æ’å…¥æ•°æ®åº“å¼€å§‹ï¼š ' . PHP_EOL;
         if (isset($article['title']) && strlen($article['title']) != 0) 
 			$title = addslashes($article['title']);
 		else { 
-			print 'ÐÂÎÅ±êÌâ²»ÄÜÎª¿Õ£¡' . PHP_EOL;
+			print 'æ–°é—»æ ‡é¢˜ä¸èƒ½ä¸ºç©ºï¼' . PHP_EOL;
 			return;
 		}
         if (isset($article['date']))
@@ -219,7 +219,7 @@ class FTChineseCrawler extends crawler {
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "' AND news_date = '". $date ."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo 'ÓÉÓÚÊý¾Ý¿âÒÑ´æÔÚ¸ÃÐÂÎÅ£¬±¾ÌõÒÑ±»ºöÂÔ£¡' . PHP_EOL;
+			echo 'ç”±äºŽæ•°æ®åº“å·²å­˜åœ¨è¯¥æ–°é—»ï¼Œæœ¬æ¡å·²è¢«å¿½ç•¥ï¼' . PHP_EOL;
 			return;
 		}
 		
@@ -228,14 +228,14 @@ class FTChineseCrawler extends crawler {
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
         if ($result) 
-			echo 'Êý¾Ý²åÈë³É¹¦£¡' . PHP_EOL;
+			echo 'æ•°æ®æ’å…¥æˆåŠŸï¼' . PHP_EOL;
         else 
-			echo "Êý¾Ý²åÈëÊ§°Ü!" . PHP_EOL;
+			echo "æ•°æ®æ’å…¥å¤±è´¥!" . PHP_EOL;
     }
 	
 	
 	/**
-     *   Îö¹¹º¯Êý£¬
+     *   æžæž„å‡½æ•°ï¼Œ
      */
     public function __deconstruct() {
         unset($this->_downloader);

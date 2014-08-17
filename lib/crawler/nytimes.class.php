@@ -1,11 +1,11 @@
 <?php 
 /**
-*	Description£ºÅ¦Ô¼Ê±±¨ÖÐÎÄÍøhttp://cn.nytimes.com/ÅÀ³æ³ÌÐò£»
-*	¶ÔÃ¿Ò»¸öÈë¿ÚURL£¬Ê×ÏÈ½âÎö³öÆäÖÐµÄËùÓÐÎÄÕÂÁ´½ÓµØÖ·£¬ÔÙ½«ÕâÐ©ÎÄÕÂµØÖ·Öð¸öÏÂÔØ£¬
-*	½âÎö³öÆäÖÐµÄÖØÒª×Ö¶Î£¬ÈçÐÂÎÅ±êÌâ£¬·¢²¼Ê±¼ä£¬ÐÂÎÅÕýÎÄµÈ
-*	Created Date£º2014.8.6 Íí
-* 	Modified Date£º 2014.8.7,2014.8.8
-*	Author£ºÑîË«Áú slyang@aliyun.com
+*	Descriptionï¼šçº½çº¦æ—¶æŠ¥ä¸­æ–‡ç½‘http://cn.nytimes.com/çˆ¬è™«ç¨‹åºï¼›
+*	å¯¹æ¯ä¸€ä¸ªå…¥å£URLï¼Œé¦–å…ˆè§£æžå‡ºå…¶ä¸­çš„æ‰€æœ‰æ–‡ç« é“¾æŽ¥åœ°å€ï¼Œå†å°†è¿™äº›æ–‡ç« åœ°å€é€ä¸ªä¸‹è½½ï¼Œ
+*	è§£æžå‡ºå…¶ä¸­çš„é‡è¦å­—æ®µï¼Œå¦‚æ–°é—»æ ‡é¢˜ï¼Œå‘å¸ƒæ—¶é—´ï¼Œæ–°é—»æ­£æ–‡ç­‰
+*	Created Dateï¼š2014.8.6 æ™š
+* 	Modified Dateï¼š 2014.8.7,2014.8.8
+*	Authorï¼šæ¨åŒé¾™ slyang@aliyun.com
 * 	
 **/
 require_once('lib/simple_html_dom.php');
@@ -23,10 +23,10 @@ class NYtimesCrawler extends crawler{
 	private $_url = null;
 	private $_url_history_file_path;
 	/**
-	*	¹¹Ôìº¯Êý£º¼ÓÔØÀúÊ·urlÊý¾Ý£¨ÒÑÅÀÈ¡urlÎÄ¼þ£©
+	*	æž„é€ å‡½æ•°ï¼šåŠ è½½åŽ†å²urlæ•°æ®ï¼ˆå·²çˆ¬å–urlæ–‡ä»¶ï¼‰
 	*/
 	public function __construct() {
-		//»ñµÃÍøÒ³ÏÂÔØÆ÷ÊµÀý
+		//èŽ·å¾—ç½‘é¡µä¸‹è½½å™¨å®žä¾‹
 		$this->_downloader = downloader::get_instance();
 		$this->_url = new url();
 		$this->_url_history = 'urllog/nytimes_url.txt';
@@ -34,18 +34,18 @@ class NYtimesCrawler extends crawler{
 	}
 
 	 /**
-	 * ÅÀ³æÆô¶¯ÔËÐÐ£¬urlÎªÈë¿ÚµØÖ·
+	 * çˆ¬è™«å¯åŠ¨è¿è¡Œï¼Œurlä¸ºå…¥å£åœ°å€
 	 */
 	public function start($url) {
         $html = $this->_downloader->download($url);
         if (!($links = $this->extract_links($html))) {
-			print '¸ÃÈë¿ÚÖÐ£¬Î´³éÈ¡³öURL' . PHP_EOL;
+			print 'è¯¥å…¥å£ä¸­ï¼ŒæœªæŠ½å–å‡ºURL' . PHP_EOL;
 			return;
 		}
 		
         foreach ($links as $link) {
             if ($this->_url->is_fetched($link)) {
-                echo 'ºöÂÔÒ»ÌõÖØ¸´URL' . PHP_EOL;
+                echo 'å¿½ç•¥ä¸€æ¡é‡å¤URL' . PHP_EOL;
                 continue;
             }
             $html = $this->_downloader->download($link);
@@ -61,7 +61,7 @@ class NYtimesCrawler extends crawler{
 	}
 
     /**
-	 * ³éÈ¡Ò³ÃæÖÐµÄÁ´½ÓµØÖ·
+	 * æŠ½å–é¡µé¢ä¸­çš„é“¾æŽ¥åœ°å€
      * @param $html
      * @return array
      */
@@ -80,7 +80,7 @@ class NYtimesCrawler extends crawler{
 					$url = $element->href;
 				}
                 if ( $this->_url->is_fetched($url)) {
-                    echo 'ºöÂÔÒ»ÌõÒÑÅÀÈ¡URL' . PHP_EOL;
+                    echo 'å¿½ç•¥ä¸€æ¡å·²çˆ¬å–URL' . PHP_EOL;
                     continue;
                 }
                 array_push($links, $url);
@@ -90,20 +90,20 @@ class NYtimesCrawler extends crawler{
 	}
 
 	/**
-	*	½âÎöÍøÒ³ÄÚÈÝ
+	*	è§£æžç½‘é¡µå†…å®¹
 	*/
 	public function extract_content($html) {
 		$doc = str_get_html($html);
         $article = array();
 		
-		//ÌáÈ¡ÐÂÎÅÍ¼Æ¬µØÖ·
+		//æå–æ–°é—»å›¾ç‰‡åœ°å€
 		$image_url = '';
 		foreach ( $doc->find('meta[property=og:image]') as $element ) {
             $image_url = $element->content;
         }
         $article['image_url'] = $image_url;
 		//echo $image_url . PHP_EOL;
-		//Èç¹ûÎÄÕÂÖÐ¸½Í¼£¬ÔòÏÂÔØÍ¼Æ¬
+		//å¦‚æžœæ–‡ç« ä¸­é™„å›¾ï¼Œåˆ™ä¸‹è½½å›¾ç‰‡
 		if (strlen($image_url) != 0) {
 			$image_data = $this->_downloader->download($image_url);
 			if (strlen($image_data) != 0) {
@@ -114,7 +114,7 @@ class NYtimesCrawler extends crawler{
 			}
 		}
 
-        //ÌáÈ¡ÐÂÎÅÄÚÈÝ
+        //æå–æ–°é—»å†…å®¹
 		$content = '';
         foreach ( $doc->find('div.content') as $element ) {
             foreach($element->find('p.paragraph') as $ele) {
@@ -123,38 +123,38 @@ class NYtimesCrawler extends crawler{
         }
         $article['content'] = $content;
 
-        //ÌáÈ¡ÐÂÎÅÊ±¼ä
+        //æå–æ–°é—»æ—¶é—´
         $date = '';
         foreach ($doc->find('meta[property=og:article:published_time]') as $element) {
             $date = $element->content;
         }
         $article['date'] = $date;
 
-        //ÌáÈ¡ÐÂÎÅ±êÌâ
+        //æå–æ–°é—»æ ‡é¢˜
         $title = '';
         foreach ($doc->find('h3.articleHeadline') as $element) {
             $title = $element->plaintext;
         }
         $article['title'] = $title;
 
-        //ÐÂÎÅËùÊôÀà±ð
+        //æ–°é—»æ‰€å±žç±»åˆ«
         $category = '';
         foreach ($doc->find('meta[property=og:article:section]') as $element) {
             $category = $element->content;
         }
         $article['category'] = $category;
 
-        //ÐÂÎÅ×«Ð´×÷Õß
+        //æ–°é—»æ’°å†™ä½œè€…
         $author = '';
         foreach($doc->find('meta[property=og:article:author]') as $element ) {
             $author = $element->content;
         }
         $article['author'] = $author;
 
-        //ÐÂÎÅÀ´Ô´
-        $article['source'] = iconv('GBK','UTF-8','Å¦Ô¼Ê±±¨ÖÐÎÄÍø');
+        //æ–°é—»æ¥æº
+        $article['source'] = iconv('GBK','UTF-8','çº½çº¦æ—¶æŠ¥ä¸­æ–‡ç½‘');
 
-        //ÐÂÎÅURL
+        //æ–°é—»URL
         $news_url = '';
         foreach($doc->find('meta[name=twitter:url]') as $element ) {
             $news_url = $element->content;
@@ -165,7 +165,7 @@ class NYtimesCrawler extends crawler{
 
 
 	/**
-	*	½«ÎÄÕÂ²åÈëÊý¾Ý¿â
+	*	å°†æ–‡ç« æ’å…¥æ•°æ®åº“
 	*/
     public function insert($article) {
         if (isset($article['title']) && strlen($article['title']) != 0) 
@@ -196,7 +196,7 @@ class NYtimesCrawler extends crawler{
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '".$title."' AND news_date = '". $date."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo 'ÓÉÓÚÊý¾Ý¿âÒÑ´æÔÚ¸ÃÐÂÎÅ£¬±¾ÌõÒÑ±»ºöÂÔ£¡' . PHP_EOL;
+			echo 'ç”±äºŽæ•°æ®åº“å·²å­˜åœ¨è¯¥æ–°é—»ï¼Œæœ¬æ¡å·²è¢«å¿½ç•¥ï¼' . PHP_EOL;
 			return;
 		}
 		
@@ -204,12 +204,12 @@ class NYtimesCrawler extends crawler{
 		(news_title,news_date,news_source,news_content,news_author,news_category,news_url,news_image_url,news_image_local)
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
-        if ($result) echo 'Êý¾Ý²åÈë³É¹¦£¡' . PHP_EOL;
-            else echo "Êý¾Ý²åÈëÊ§°Ü!" . PHP_EOL;
+        if ($result) echo 'æ•°æ®æ’å…¥æˆåŠŸï¼' . PHP_EOL;
+            else echo "æ•°æ®æ’å…¥å¤±è´¥!" . PHP_EOL;
     }
 	
 	/**
-     *   Îö¹¹º¯Êý£¬
+     *   æžæž„å‡½æ•°ï¼Œ
      */
     public function __deconstruct() {
         unset($this->_downloader);
