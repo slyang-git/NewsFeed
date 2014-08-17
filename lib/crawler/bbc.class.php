@@ -4,7 +4,7 @@
 *	对每一个入口URL，首先解析出其中的所有文章链接地址，再将这些文章地址逐个下载，
 *	解析出其中的重要字段，如新闻标题，发布时间，新闻正文等
 *	Created Date：2014-08-13 23:06
-* 	Modified Date： 
+* 	Modified Date： 2014-08-17 21:40
 *	Author：杨双龙 slyang@aliyun.com
 * 	
 **/
@@ -60,11 +60,11 @@ class BBCCrawler extends crawler {
 				if (!$article) continue;
 			}
             //var_dump($article);
-            //$this->insert($article);
-			//$this->_url->push($link);
+            $this->insert($article);
+			$this->_url->push($link);
 			
         }
-       // $this->_url->save_url_history($this->_url_history);
+		$this->_url->save_url_history($this->_url_history);
 		
 	}
 
@@ -100,25 +100,22 @@ class BBCCrawler extends crawler {
 		$doc = str_get_html($html);
 		$element = $doc->find('div.module');
 		if (!isset($element)) {
-			print iconv('UTF-8','GBK','本页面不是新闻页面') . PHP_EOL;
+			print '本页面不是新闻页面' . PHP_EOL;
 			return false;
 		}
-		
 		
         $article = array();
 		
 		//提取新闻图片地址
 		$image_url = '';
-		foreach ($doc->find('div#bodytext') as $element) {
-			if( $element->find('img.leftimage')) {
-				$image_url = $element->find('img.leftimage')->src;
-			}
+		foreach ($doc->find('div.image') as $element) {
+			$image_url = $element->src;
 			$article['image_url'] = $image_url;
 		}
 		
 		//echo $image_url . PHP_EOL;
 		//如果文章中附图，则下载图片
-		if (strlen($image_url) != 0) { //可以用empty()函数来判断
+		if (!empty($image_url)) { //可以用empty()函数来判断
 			$image_data = $this->_downloader->download($image_url);
 			if (strlen($image_data) != 0) {
 				$image_name = md5($image_data) . IMAGE_EXT;
@@ -128,66 +125,68 @@ class BBCCrawler extends crawler {
 			}
 		}
 		
-		
         //提取新闻内容
 		$content = '';
-        foreach ( $doc->find('div#bodytext') as $element ) {
+        foreach ( $doc->find('div.bodytext') as $element ) {
             foreach($element->find('p') as $ele) {
                 $content = $content . $ele->plaintext . '<br /><br />';
             }
         }
-        $article['content'] = $content;
+        $article['content'] = strip_tags($content);
 
         //提取新闻时间
-        foreach($doc->find('a.storytime') as $element) {
+		$date = '';
+        foreach($doc->find('div.datestamp') as $element) {
 			$date = $element->plaintext;
 		}
 		$date = $this->format_time($date);
         $article['date'] = $date;
 
 		//新闻撰写作者
-		foreach($doc->find('div.byline') as $element) {
+		$author = '';
+		foreach($doc->find('p.name') as $element) {
 			$author = $element->plaintext;
 		}
-        $article['author'] = $author;
+        $article['author'] = trim($author);
 		
         //提取新闻标题
         $title = '';
-		foreach($doc->find('h1#topictitle') as $element) {
+		foreach($doc->find('h1') as $element) {
 			$title = $element->plaintext;
 		}
-        $article['title'] = $title;
+        $article['title'] = strip_tags($title);
 
-        //新闻所属类别
-        foreach($doc->find('span.channel') as $element) {
+        //新闻所属类别日本企业问卷调查显示依赖中国心理减弱 - BBC中文网 - 国际</title>
+		$category = '';
+        foreach($doc->find('title') as $element) {
 			$category = $element->plaintext;
+			$pos = strrpos($category, '-');
+			$category = substr($category, $pos + 1);
 		}
         $article['category'] = $category;
 
         //新闻来源
-        $article['source'] = iconv('GBK','UTF-8','FT中文网');
+        $article['source'] = 'BBC中文网';
 
         //新闻URL
-        foreach($doc->find('link[rel=canonical]') as $element) {
-			$news_url = $element->href;
+		$news_url = '';
+        foreach($doc->find('meta[property=og:url]') as $element) {
+			$news_url = $element->content;
 		}
-        $news_url = 'http://www.ftchinese.com' . $news_url;
         $article['news_url'] = $news_url;
 		
         return $article;
 	}
 
 	public function format_time($time) {
-		$year = iconv('GBK','UTF-8','年');
-		$month = iconv('GBK','UTF-8','月');
-		$day = iconv('GBK','UTF-8','日');
-		$am = 'AM';
-		$pm = 'PM';
+		$year = '年';
+		$month = '月';
+		$day = '日';
 		$delim = array($year,$month);
 		$time = str_replace($day,'',str_replace($delim,'-',$time));
-		strpos($time,$am)?$time=str_replace($am,'',$time):$time=str_replace($pm,'',$time);
-		//$time = str_replace($year,'-',$time);
-		//$time = str_replace($month,'-',$time);
+		//strpos($time,$am)?$time=str_replace($am,'',$time):$time=str_replace($pm,'',$time);
+		$time = str_replace(', 格林尼治标准时间', ' ', str_replace('更新时间', '', $time));
+		print $time . PHP_EOL;
 		return trim($time);
 	}
 	
