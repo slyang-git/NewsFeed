@@ -41,7 +41,7 @@ class ForbesChinaCrawler extends crawler {
         $html = $this->_downloader->download($url);
 		//$links = array();
         if (!($links = $this->extract_links($html))) {
-			print '该入口中，未抽取出URL' . PHP_EOL;
+			print 'No URLs Found in this Entrance' . PHP_EOL;
 			return;
 		}
 		
@@ -49,7 +49,7 @@ class ForbesChinaCrawler extends crawler {
         foreach ($links as $link) {
 			
             if ($this->_url->is_fetched($link)) {
-                print '忽略一条重复URL ' . PHP_EOL;
+                print 'Ignored a repetive URL ' . PHP_EOL;
                 continue;
             }
             $html = $this->_downloader->download($link);
@@ -76,11 +76,11 @@ class ForbesChinaCrawler extends crawler {
 		$pattern = '{http://www\.forbeschina\.com/review/\\d{6,}/\\d*\.shtml}';
 		$matches = array();
 		preg_match_all($pattern, $html, $matches);
-		echo '抽取出的链接数量：' . count($matches[0]) . PHP_EOL;
+		echo 'Extracted URLs：' . count($matches[0]) . PHP_EOL;
 		
 		foreach($matches[0] as $link) {
 			if ( $this->_url->is_fetched($link) ) {
-                echo '忽略一条已爬取URL' . PHP_EOL;
+                echo 'Ignored an URL' . PHP_EOL;
                 continue;
             }
             array_push($links, $link);
@@ -156,7 +156,7 @@ class ForbesChinaCrawler extends crawler {
         $article['category'] = $category;
 
         //新闻来源
-        $article['source'] = iconv('GBK','UTF-8','福布斯中文网');
+        $article['source'] = '福布斯中文网';
 
         //新闻URL
         $news_url = '';
@@ -169,9 +169,9 @@ class ForbesChinaCrawler extends crawler {
 	}
 
 	public function format_time($time) {
-		$year = iconv('GBK','UTF-8','年');
-		$month = iconv('GBK','UTF-8','月');
-		$day = iconv('GBK','UTF-8','日');
+		$year = '年';
+		$month = '月';
+		$day = '日';
 		$delim = array($year,$month);
 		$time = str_replace($day,'',str_replace($delim,'-',$time));
 		//$time = str_replace($year,'-',$time);
@@ -187,7 +187,7 @@ class ForbesChinaCrawler extends crawler {
         if (isset($article['title']) && strlen($article['title']) != 0) 
 			$title = addslashes($article['title']);
 		else { 
-			print '新闻标题不能为空！' . PHP_EOL;
+			print 'The News Title Can NOT be empty！' . PHP_EOL;
 			return;
 		}
         if (isset($article['date']))
@@ -214,7 +214,7 @@ class ForbesChinaCrawler extends crawler {
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "' AND news_date = '". $date ."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo '由于数据库已存在该新闻，本条已被忽略！' . PHP_EOL;
+			echo 'News already in DataBase, Ignored！' . PHP_EOL;
 			return;
 		}
 		
@@ -223,9 +223,9 @@ class ForbesChinaCrawler extends crawler {
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
         if ($result) 
-			echo '数据插入成功！' . PHP_EOL;
+			echo 'Insert Success！' . PHP_EOL;
         else 
-			echo "数据插入失败!" . PHP_EOL;
+			echo "Insert Failed!" . PHP_EOL;
     }
 	
 	

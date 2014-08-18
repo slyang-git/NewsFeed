@@ -108,14 +108,15 @@ class BBCCrawler extends crawler {
 		
 		//提取新闻图片地址
 		$image_url = '';
-		foreach ($doc->find('div.image') as $element) {
-			$image_url = $element->src;
-			$article['image_url'] = $image_url;
+		foreach ($doc->find('div.module') as $element) {
+			foreach($element->find('img') as $ele) {
+				$image_url = $element->find('img')->src;
+				$article['image_url'] = $image_url;
+			}
 		}
 		
-		//echo $image_url . PHP_EOL;
 		//如果文章中附图，则下载图片
-		if (!empty($image_url)) { //可以用empty()函数来判断
+		if (!empty($image_url)) {
 			$image_data = $this->_downloader->download($image_url);
 			if (strlen($image_data) != 0) {
 				$image_name = md5($image_data) . IMAGE_EXT;
@@ -163,7 +164,7 @@ class BBCCrawler extends crawler {
 			$pos = strrpos($category, '-');
 			$category = substr($category, $pos + 1);
 		}
-        $article['category'] = $category;
+        $article['category'] = trim($category);
 
         //新闻来源
         $article['source'] = 'BBC中文网';
@@ -183,9 +184,10 @@ class BBCCrawler extends crawler {
 		$month = '月';
 		$day = '日';
 		$delim = array($year,$month);
+		$time = str_replace(', 格林尼治标准时间', ' ', str_replace('更新时间', '', $time));
 		$time = str_replace($day,'',str_replace($delim,'-',$time));
 		//strpos($time,$am)?$time=str_replace($am,'',$time):$time=str_replace($pm,'',$time);
-		$time = str_replace(', 格林尼治标准时间', ' ', str_replace('更新时间', '', $time));
+		
 		print $time . PHP_EOL;
 		return trim($time);
 	}

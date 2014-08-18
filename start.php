@@ -4,7 +4,7 @@ define('IMAGE_EXT', '.jpg');
 
 require('lib/crawler/nytimes.class.php');
 require('lib/crawler/forbes.class.php');
-require('lib/crawler/tfchinese.class.php');
+require('lib/crawler/ftchinese.class.php');
 require('lib/crawler/bbc.class.php');
 
 
@@ -16,7 +16,7 @@ $fp = '';
 //记录开始运行时间
 $start_time= microtime(true);
 
-/*
+
 //=====纽约时报===============
 $crawler = new NYtimesCrawler();
 $filename = 'urlseed/nytimes.txt';
@@ -52,8 +52,8 @@ while (!feof($fp)) {
 	echo '开始爬取入口URL：' . $link . PHP_EOL;
     $crawler->start($link);
 }
-*/
 
+/*
 //=====BBC中文网===============
 $crawler = new BBCCrawler();
 $url_seed_filename = 'urlseed/bbc.txt';
@@ -65,7 +65,7 @@ while (!feof($fp)) {
 	echo '开始爬取入口URL：' . $link . PHP_EOL;
     $crawler->start($link);
 }
-
+*/
 
 /*
 

@@ -39,13 +39,13 @@ class NYtimesCrawler extends crawler{
 	public function start($url) {
         $html = $this->_downloader->download($url);
         if (!($links = $this->extract_links($html))) {
-			print '该入口中，未抽取出URL' . PHP_EOL;
+			print 'No URLs Found in this Entrance' . PHP_EOL;
 			return;
 		}
 		
         foreach ($links as $link) {
             if ($this->_url->is_fetched($link)) {
-                echo '忽略一条重复URL' . PHP_EOL;
+                echo 'Ignored a repetive URL' . PHP_EOL;
                 continue;
             }
             $html = $this->_downloader->download($link);
@@ -80,7 +80,7 @@ class NYtimesCrawler extends crawler{
 					$url = $element->href;
 				}
                 if ( $this->_url->is_fetched($url)) {
-                    echo '忽略一条已爬取URL' . PHP_EOL;
+                    echo 'Ignored an URL' . PHP_EOL;
                     continue;
                 }
                 array_push($links, $url);
@@ -152,7 +152,7 @@ class NYtimesCrawler extends crawler{
         $article['author'] = $author;
 
         //新闻来源
-        $article['source'] = iconv('GBK','UTF-8','纽约时报中文网');
+        $article['source'] = '纽约时报中文网';
 
         //新闻URL
         $news_url = '';
@@ -196,7 +196,7 @@ class NYtimesCrawler extends crawler{
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '".$title."' AND news_date = '". $date."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo '由于数据库已存在该新闻，本条已被忽略！' . PHP_EOL;
+			echo 'News already in DataBase, Ignored！' . PHP_EOL;
 			return;
 		}
 		
@@ -204,8 +204,10 @@ class NYtimesCrawler extends crawler{
 		(news_title,news_date,news_source,news_content,news_author,news_category,news_url,news_image_url,news_image_local)
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
-        if ($result) echo '数据插入成功！' . PHP_EOL;
-            else echo "数据插入失败!" . PHP_EOL;
+        if ($result) 
+			echo 'Insert Success！' . PHP_EOL;
+        else 
+			echo "Insert Failed!" . PHP_EOL;
     }
 	
 	/**
