@@ -4,7 +4,7 @@
 *	对每一个入口URL，首先解析出其中的所有文章链接地址，再将这些文章地址逐个下载，
 *	解析出其中的重要字段，如新闻标题，发布时间，新闻正文等
 *	Created Date：2014-08-13 23:06
-* 	Modified Date： 2014-08-17 21:40
+* 	Modified Date： 2014-08-17 21:40 2014-08-19 21:00
 *	Author：杨双龙 slyang@aliyun.com
 * 	
 **/
@@ -41,14 +41,14 @@ class BBCCrawler extends crawler {
         $html = $this->_downloader->download($url);
 		//$links = array();
         if (!($links = $this->extract_links($html))) {
-			print '该入口中，未抽取出新URL' . PHP_EOL;
+			print 'No URLs Found in this Entrance' . PHP_EOL;
 			return;
 		}
 		
 		//print '开始下载新闻 ' . PHP_EOL;
         foreach ($links as $link) {
             if ($this->_url->is_fetched($link)) {
-                print '忽略一条重复URL ' . PHP_EOL;
+                print 'Ignored a repetive URL ' . PHP_EOL;
                 continue;
             }
 			
@@ -62,7 +62,6 @@ class BBCCrawler extends crawler {
             //var_dump($article);
             $this->insert($article);
 			$this->_url->push($link);
-			
         }
 		$this->_url->save_url_history($this->_url_history);
 		
@@ -78,11 +77,11 @@ class BBCCrawler extends crawler {
 		$pattern = '{/zhongwen/simp/\\w+/\\d+/\\d+/\\d+_\\w+\\.shtml}';
 		$matches = array();
 		preg_match_all($pattern, $html, $matches);
-		echo '抽取出的链接数量：' . count($matches[0]) . PHP_EOL;
+		echo 'Extracted URLs: ' . count($matches[0]) . PHP_EOL;
 		
 		foreach($matches[0] as $link) {
 			if ( $this->_url->is_fetched($link) ) {
-                echo '忽略一条已爬取URL' . PHP_EOL;
+                echo 'Ignored an URL' . PHP_EOL;
                 continue;
             }
 			
@@ -100,7 +99,7 @@ class BBCCrawler extends crawler {
 		$doc = str_get_html($html);
 		$element = $doc->find('div.module');
 		if (!isset($element)) {
-			print '本页面不是新闻页面' . PHP_EOL;
+			print 'Not a news page.' . PHP_EOL;
 			return false;
 		}
 		
@@ -109,9 +108,11 @@ class BBCCrawler extends crawler {
 		//提取新闻图片地址
 		$image_url = '';
 		foreach ($doc->find('div.module') as $element) {
-			foreach($element->find('img') as $ele) {
-				$image_url = $element->find('img')->src;
-				$article['image_url'] = $image_url;
+			if ($element->find('img')) {
+				foreach($element->find('img') as $ele) {
+					$image_url = $ele->src;
+					$article['image_url'] = $image_url;
+				}
 			}
 		}
 		
@@ -133,15 +134,7 @@ class BBCCrawler extends crawler {
                 $content = $content . $ele->plaintext . '<br /><br />';
             }
         }
-        $article['content'] = strip_tags($content);
-
-        //提取新闻时间
-		$date = '';
-        foreach($doc->find('div.datestamp') as $element) {
-			$date = $element->plaintext;
-		}
-		$date = $this->format_time($date);
-        $article['date'] = $date;
+        $article['content'] = $content;
 
 		//新闻撰写作者
 		$author = '';
@@ -155,9 +148,8 @@ class BBCCrawler extends crawler {
 		foreach($doc->find('h1') as $element) {
 			$title = $element->plaintext;
 		}
-        $article['title'] = strip_tags($title);
+        $article['title'] = $title;
 
-        //新闻所属类别日本企业问卷调查显示依赖中国心理减弱 - BBC中文网 - 国际</title>
 		$category = '';
         foreach($doc->find('title') as $element) {
 			$category = $element->plaintext;
@@ -176,20 +168,16 @@ class BBCCrawler extends crawler {
 		}
         $article['news_url'] = $news_url;
 		
-        return $article;
-	}
-
-	public function format_time($time) {
-		$year = '年';
-		$month = '月';
-		$day = '日';
-		$delim = array($year,$month);
-		$time = str_replace(', 格林尼治标准时间', ' ', str_replace('更新时间', '', $time));
-		$time = str_replace($day,'',str_replace($delim,'-',$time));
-		//strpos($time,$am)?$time=str_replace($am,'',$time):$time=str_replace($pm,'',$time);
+		//提取新闻时间
+		$date = '';
+        foreach($doc->find('meta[name=dcterms.modified]') as $element) {
+			$date = $element->content;
+		}
+		print $date . PHP_EOL;
+		//$date = $this->format_time($date);
+        $article['date'] = $date;
 		
-		print $time . PHP_EOL;
-		return trim($time);
+        return $article;
 	}
 	
 	/**
@@ -200,7 +188,7 @@ class BBCCrawler extends crawler {
         if (isset($article['title']) && strlen($article['title']) != 0) 
 			$title = addslashes($article['title']);
 		else { 
-			print '新闻标题不能为空！' . PHP_EOL;
+			print 'News title should not be NULL' . PHP_EOL;
 			return;
 		}
         if (isset($article['date']))
@@ -224,10 +212,10 @@ class BBCCrawler extends crawler {
 		else
 			$news_image_local = '';
 		
-		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "' AND news_date = '". $date ."'";
+		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo '由于数据库已存在该新闻，本条已被忽略！' . PHP_EOL;
+			echo 'News already in DataBase, Ignored!' . PHP_EOL;
 			return;
 		}
 		
@@ -236,9 +224,9 @@ class BBCCrawler extends crawler {
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
         if ($result) 
-			echo '数据插入成功！' . PHP_EOL;
+			echo 'Insert Success!' . PHP_EOL;
         else 
-			echo "数据插入失败!" . PHP_EOL;
+			echo "Insert Failed!" . PHP_EOL;
     }
 	
 	
