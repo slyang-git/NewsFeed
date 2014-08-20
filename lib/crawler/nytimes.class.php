@@ -196,7 +196,7 @@ class NYtimesCrawler extends crawler{
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '".$title."' AND news_date = '". $date."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo 'News already in DataBase, Ignored！' . PHP_EOL;
+			echo 'News already in DataBase, Ignored!' . PHP_EOL;
 			return;
 		}
 		
@@ -205,7 +205,7 @@ class NYtimesCrawler extends crawler{
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
         if ($result) 
-			echo 'Insert Success！' . PHP_EOL;
+			echo 'Insert Success!' . PHP_EOL;
         else 
 			echo "Insert Failed!" . PHP_EOL;
     }
