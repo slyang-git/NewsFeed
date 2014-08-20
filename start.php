@@ -25,7 +25,7 @@ $fp = fopen($filename,'r');
 while (!feof($fp)) {
     $link = fgets($fp);
 	if(empty($link)) continue; //防止空行
-	echo '开始爬取入口URL：' . $link;
+	echo 'Starting URL: ' . $link;
     $crawler->start($link);
 }
 
@@ -37,7 +37,7 @@ $fp = fopen($url_seed_filename, 'r');
 while (!feof($fp)) {
     $link = fgets($fp);
 	if(empty($link)) continue; //防止空行
-	echo '开始爬取入口URL：' . $link . PHP_EOL;
+	echo 'Starting URL: ' . $link . PHP_EOL;
     $crawler->start($link);
 }
 
@@ -49,11 +49,10 @@ $fp = fopen($url_seed_filename, 'r');
 while (!feof($fp)) {
     $link = fgets($fp);
 	if(empty($link)) continue; //防止空行
-	echo '开始爬取入口URL：' . $link . PHP_EOL;
+	echo 'Starting URL: ' . $link . PHP_EOL;
     $crawler->start($link);
 }
 
-/*
 //=====BBC中文网===============
 $crawler = new BBCCrawler();
 $url_seed_filename = 'urlseed/bbc.txt';
@@ -61,11 +60,11 @@ $fp = fopen($url_seed_filename, 'r');
 
 while (!feof($fp)) {
     $link = fgets($fp);
-	if(empty($link)) continue; //防止空行
-	echo '开始爬取入口URL：' . $link . PHP_EOL;
+	//防止空行
+	if(empty($link)) continue; 
+	echo 'Starting URL: ' . $link . PHP_EOL;
     $crawler->start($link);
 }
-*/
 
 /*
 
@@ -73,7 +72,7 @@ while (!feof($fp)) {
 //记录结束运行时间
 $finish_time = microtime(true);
 
-echo '程序执行完成，共耗时：' . ($finish_time - $start_time) . '秒！';
+echo 'Finished, Time used: ' . ($finish_time - $start_time) . 'Seconds!';
 //$crawler->start('http://cn.nytimes.com/entrepreneurs/');
 
 
