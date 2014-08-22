@@ -75,7 +75,7 @@ class FTChineseCrawler extends crawler {
 		$pattern = '{/story/\\d{6,}}';
 		$matches = array();
 		preg_match_all($pattern, $html, $matches);
-		echo 'Extracted URLs：' . count($matches[0]) . PHP_EOL;
+		echo 'Extracted URLs:' . count($matches[0]) . PHP_EOL;
 		
 		foreach($matches[0] as $link) {
 			if ( $this->_url->is_fetched($link) ) {
@@ -228,7 +228,7 @@ class FTChineseCrawler extends crawler {
         VALUES('$title','$date','$source','$content','$author','$category','$news_url','$news_iamge_url','$news_image_local')";
         $result = $mysqli->insert($sql);
         if ($result) 
-			echo 'Insert Success！' . PHP_EOL;
+			echo 'Insert Success!' . PHP_EOL;
         else 
 			echo "Insert Failed!" . PHP_EOL;
     }
