@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>新闻订阅</title>
-<meta charset="GBK" />
+<meta charset="UTF-8" />
 <style type="text/css">
 	#subcribe {
 		margin:0 auto;
@@ -15,7 +15,7 @@
 
 <?php
 	require('lib/sendmail.class.php');
-	date_default_timezone_set('Asia/Shanghai');
+	date_default_timezone_set('PRC');
 	
 	//将用户订阅信息存数据库
 	function save_to_db($sql,$email) {

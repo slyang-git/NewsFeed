@@ -118,7 +118,8 @@ class NYtimesCrawler extends crawler{
 		$content = '';
         foreach ( $doc->find('div.content') as $element ) {
             foreach($element->find('p.paragraph') as $ele) {
-                $content = $content . $ele->plaintext . '<br /><br />';
+                if (!empty($ele->plaintext)) 
+					$content .= trim($ele->plaintext) . '<br /><br />';
             }
         }
         $article['content'] = $content;

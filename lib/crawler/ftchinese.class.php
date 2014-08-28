@@ -126,7 +126,8 @@ class FTChineseCrawler extends crawler {
 		$content = '';
         foreach ( $doc->find('div#bodytext') as $element ) {
             foreach($element->find('p') as $ele) {
-                $content = $content . $ele->plaintext . '<br /><br />';
+                if (!empty($ele->plaintext)) 
+					$content .= trim($ele->plaintext) . '<br /><br />';
             }
         }
         $article['content'] = $content;
@@ -219,7 +220,7 @@ class FTChineseCrawler extends crawler {
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "' AND news_date = '". $date ."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo '由于数据库已存在该新闻，本条已被忽略！' . PHP_EOL;
+			echo '由于数据库已存在该新闻，本条已被忽略!' . PHP_EOL;
 			return;
 		}
 		

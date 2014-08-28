@@ -49,7 +49,7 @@ class ForbesChinaCrawler extends crawler {
         foreach ($links as $link) {
 			
             if ($this->_url->is_fetched($link)) {
-                print 'Ignored a repetive URL ' . PHP_EOL;
+                print 'Ignored a repetive URL' . PHP_EOL;
                 continue;
             }
             $html = $this->_downloader->download($link);
@@ -76,7 +76,7 @@ class ForbesChinaCrawler extends crawler {
 		$pattern = '{http://www\.forbeschina\.com/review/\\d{6,}/\\d*\.shtml}';
 		$matches = array();
 		preg_match_all($pattern, $html, $matches);
-		echo 'Extracted URLs：' . count($matches[0]) . PHP_EOL;
+		echo 'Extracted URLs:' . count($matches[0]) . PHP_EOL;
 		
 		foreach($matches[0] as $link) {
 			if ( $this->_url->is_fetched($link) ) {
@@ -120,7 +120,8 @@ class ForbesChinaCrawler extends crawler {
 		$content = '';
         foreach ( $doc->find('div.p_detail') as $element ) {
             foreach($element->find('p') as $ele) {
-                $content = $content . $ele->plaintext . '<br /><br />';
+                if (!empty($ele->plaintext)) 
+					$content .= trim($ele->plaintext) . '<br /><br />';
             }
         }
         $article['content'] = $content;
@@ -187,7 +188,7 @@ class ForbesChinaCrawler extends crawler {
         if (isset($article['title']) && strlen($article['title']) != 0) 
 			$title = addslashes($article['title']);
 		else { 
-			print 'The News Title Can NOT be empty！' . PHP_EOL;
+			print 'The News Title Can NOT be empty!' . PHP_EOL;
 			return;
 		}
         if (isset($article['date']))
@@ -214,7 +215,7 @@ class ForbesChinaCrawler extends crawler {
 		$sql = "SELECT news_id FROM global_news WHERE news_title = '" .$title. "' AND news_date = '". $date ."'";
         $mysqli = database::get_instance();
         if ($mysqli->query($sql)) {
-			echo 'News already in DataBase, Ignored！' . PHP_EOL;
+			echo 'News already in DataBase, Ignored!' . PHP_EOL;
 			return;
 		}
 		
